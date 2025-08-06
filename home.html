@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Flex container for top-tabs */
+    .top-tabs {
+      display: flex;
+      justify-content: space-between; /* Space between logo and profile button */
+      align-items: center;
+      padding: 10px;
+      background-color: #0b0b0b;
+      width: 100%;
+    }
+
+    /* Logo section on the left */
+.left-side {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 30px;  /* Adjust the size of the logo */
+  height: 30px; /* Set the height equal to the width for a perfect circle */
+  margin-right: 10px;
+  border-radius: 50%; /* Makes the logo round */
+  object-fit: cover; /* Ensures the logo fits well in the circle */
+}
+
+
+    /* Center the Home link */
+.center {
+  position: absolute; /* Position it absolutely to center it */
+  left: 50%;
+  transform: translateX(-50%); /* Ensure it's exactly centered */
+}
+
+    /* Profile Dropdown container on the right */
+    .right-side {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    /* Profile dropdown button styling */
+    .profile-dropdown {
+      position: relative;
+    }
+
+    #profile-button {
+      font-size: 15px;
+      padding: 5px 5px;
+      background-color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Profile dropdown content styling */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      right: 0;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #ddd;
+    }
+
+    .profile-dropdown:hover .dropdown-content {
+      display: block;
+    }
+   /* Style for the search bar container */
+.search-bar {
+    position: relative; /* Ensures dropdowns are positioned relative to the search bar */
+}
+
+/* Style for the first dropdown (Mobile, Laptop) */
+.dropdown {
+    display: none; /* Hide dropdown initially */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 10;
+}
+
+/* Show the first dropdown when the search bar container is hovered */
+.search-bar:hover .dropdown {
+    display: block;
+}
+
+.dropdown ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown ul li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown ul li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Style for the second dropdown (Mobile options) */
+#mobile-dropdown {
+    display: none; /* Hide mobile-specific dropdown initially */
+    position: absolute;
+    top: 120%; /* Position below the first dropdown */
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 9; /* Ensure it's below the first dropdown */
+}
+
+
+/* Style for the third dropdown (Laptop options) */
+#laptop-dropdown {
+    display: none; /* Hide mobile-specific dropdown initially */
+    position: absolute;
+    top: 120%; /* Position below the first dropdown */
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 9; /* Ensure it's below the first dropdown */
+
+}
+
+
+/* Ensure sections are visually distinct */
+.mobile-section, .laptop-section {
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+}
+
+.mobile-section {
+  background-color: #f1f8e9; /* Light blue for mobile */
+}
+
+.laptop-section {
+  background-color: #f1f8e9; /* Light green for laptop */
+}
+
+/* Optional: Ensure the buttons and item lists are styled accordingly */
+.add-btn {
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.add-btn:hover {
+  background-color: #45a049;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Top Navigation Tabs -->
+  <div class="top-tabs">
+    <!-- Left side with Logo -->
+    <div class="left-side">
+      <img src="photos\logo.png" alt="Logo" class="logo"> <!-- Add your logo here -->
+      <div class="center">
+        <a>Home</a>
+      </div>
+    </div>
+
+    <!-- Right side with Profile Button -->
+    <div class="right-side">
+      <!-- Profile Button with Dropdown -->
+      <div class="profile-dropdown">
+        <button id="profile-button">👤</button>
+        <div class="dropdown-content">
+          <a href="username.html">Riya Kumari</a>
+          <a href="javascript:void(0);" onclick="openChangePasswordModal()">Change Password</a>
+          <a href="#about-us-section">Help</a>
+          <a href="javascript:void(0);" id="logout-button">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="home-container">
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="search" placeholder="Search inventory..." onkeyup="filterItems()">
+    
+        <!-- Microphone Button inside the search bar (right corner) -->
+        <button id="mic-button" onclick="startSpeechRecognition()">
+            🎤
+        </button>
+
+        <!-- First Dropdown for Mobile and Laptop -->
+        <div id="dropdown" class="dropdown">
+          <b><p style="text-align: left; padding: 10px; padding-left: 20px;">List of Products: </p></b>
+            <ul>
+                <li onclick="selectCategory('Mobile')">Mobile</li>
+                <li onclick="selectCategory('Laptop')">Laptop</li>
+            </ul>
+        </div>
+
+        <!-- Second Dropdown for Mobile Options (iPhone, Samsung Galaxy, Realme, etc.) -->
+        <div id="mobile-dropdown" class="dropdown">
+            <ul>
+                <li onclick="selectMobileOption('iPhone')">iPhone</li>
+                <li onclick="selectMobileOption('Samsung Galaxy')">Samsung Galaxy</li>
+                <li onclick="selectMobileOption('Realme')">Realme</li>
+                <li onclick="selectMobileOption('Google Pixel')">Google Pixel</li>
+                <li onclick="selectMobileOption('Redmi')">Redmi</li>
+            </ul>
+        </div>
+
+        <!-- Second Dropdown for Laptop Options (HP, Dell, Lenovo) -->
+        <div id="laptop-dropdown" class="dropdown">
+            <ul>
+                <li onclick="selectLaptopOption('HP')">HP</li>
+                <li onclick="selectLaptopOption('Dell')">Dell</li>
+                <li onclick="selectLaptopOption('Lenovo')">Lenovo</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+    
+  
+    <!-- Mobile Inventory Section -->
+<div class="inventory-section mobile-section">
+  <h2>Mobile Inventory</h2>
+  <div id="mobile-list" class="item-list">
+        <a href="iphone.html" class="item-card">
+          <div class="item-card-content">
+            <img src="photos\iphone.jpeg" alt="IPhone 13" class="item-image">
+            <h3>IPhone</h3>
+            <p>Total stock 654</p>
+          </div>
+        </a>
+
+        <a href="samsung.html" class="item-card">
+          <div class="item-card-content">
+            <img src="photos\samsung.jpeg" alt="Samsung Galaxy S21" class="item-image">
+            <h3>Samsung Galaxy</h3>
+            <p>Total stock 567</p>
+          </div>
+        </a>
+
+        <a href="realme.html" class="item-card">
+          <div class="item-card-content">
+            <img src="photos/realme.jpeg" alt="Realme" class="item-image">
+            <h3>Realme</h3>
+            <p>Total stock 356</p>
+          </div>
+        </a>
+
+        <a href="googlepixel.html" class="item-card">
+          <div class="item-card-content">
+            <img src="photos\google.jpeg" alt="Google Pixel" class="item-image">
+            <h3>Google Pixel</h3>
+            <p>Total stock 267</p>
+          </div>
+        </a>
+
+        <a href="redmi.html" class="item-card">
+          <div class="item-card-content">
+            <img src="photos\redmi.jpeg" alt="Redmi" class="item-image">
+            <h3>Redmi</h3>
+            <p>Total stock 123</p>
+          </div>
+        </a>
+      </div>
+      <button class="add-btn" onclick="window.location.href='addProduct.html?category=mobile'">Add Mobile</button>
+    </div>
+
+    <!-- Laptop Inventory Section -->
+<div class="inventory-section laptop-section">
+  <h2>Laptop Inventory</h2>
+  <div id="laptop-list" class="item-list">
+        <a href="hp.html" class="item-card">
+          <div class="item-card-content">
+            <img src="photos\hp.jpeg" class="item-image">
+            <h3>HP Laptop</h3>
+            <p>Total stock 34</p>
+          </div>
+        </a>
+
+        <a href="dell.html" class="item-card">
+          <div class="item-card-content">
+            <img src="photos\dell.jpeg" class="item-image">
+            <h3>Dell</h3>
+            <p>Total stock 200</p>
+          </div>
+        </a>
+
+        <a href="lenovo.html" class="item-card">
+          <div class="item-card-content">
+            <img src="photos\lenovo.jpeg" class="item-image">
+            <h3>Lenovo</h3>
+            <p>Total stock 102</p>
+          </div>
+        </a>
+      </div>
+      <button class="add-btn" onclick="window.location.href='addProduct.html?category=laptop'">Add Laptop</button>
+    </div>
+  </div>
+
+  <!-- About Us Tab in Black Box -->
+  <div class="about-us-tab" id="about-us-section">
+    <button class="tab-button" onclick="toggleAboutUs()">About Us</button>
+    <div id="about-us-content" style="display:none;">
+      <p>we provide a simple and efficient mobile and laptop inventory management system. Our platform helps businesses easily track, organize, and update their product stock in real-time.
+        Whether you're a small business or large enterprise, we aim to reduce errors, improve efficiency, and help you focus on growing your business.</p>
+    </div>
+  </div>
+
+  <!-- Support Tab (Directly Visible) -->
+  <div class="support-tab">
+    <div id="support-content">
+      <p><strong>📞 Mobile Number:</strong> +1 (123) 456-7890</p>
+      <p><strong>✉️ Email:</strong> support@example.com</p>
+      <p><strong>🏠 Address:</strong> 1234 Example St, City, State, 12345</p>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+<div id="change-password-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="modal-header">Change Password</div>
+    <div class="modal-body">
+      <!-- Current Password Section -->
+      <div class="password-field">
+        <label style="color: black;" for="old-password">Current Password:</label>
+        <input type="password" id="old-password" placeholder="Enter your old password" required>
+      </div>
+
+      <!-- New Password Section -->
+      <div class="password-field">
+        <label style="color: black;" for="new-password">New Password:</label>
+        <input type="password" id="new-password" placeholder="Enter your new password" required>
+      </div>
+
+      <!-- Confirm New Password Section -->
+      <div class="password-field">
+        <label style="color: black;" for="confirm-password"> Confirm New Password:</label>
+        <input type="password" id="confirm-password" placeholder="Confirm your new password" required>
+      </div>
+
+      <div id="password-message"></div> <!-- Message for password validation -->
+    </div>
+    <div class="modal-footer">
+      <button onclick="changePassword()">Submit</button>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+  <script>
+    // Open Change Password Modal
+    function openChangePasswordModal() {
+      document.getElementById('change-password-modal').style.display = 'block';
+    }
+
+    // Close the Change Password Modal
+    function closeModal() {
+      document.getElementById('change-password-modal').style.display = 'none';
+    }
+
+    // Change Password Function (with validation)
+    function changePassword() {
+      const oldPassword = document.getElementById('old-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      // Validate passwords
+      if (newPassword !== confirmPassword) {
+        alert('New password and confirm password do not match.');
+        return;
+      }
+
+      // Simulate password change
+      alert('Password changed successfully!');
+      closeModal(); // Close the modal after successful password change
+    }
+    
+    // Toggle About Us content visibility
+    function toggleAboutUs() {
+      const content = document.getElementById('about-us-content');
+      content.style.display = content.style.display === 'none' ? 'block' : 'none';
+    }
+
+  
+  // Filter function to search through items
+  function filterItems() {
+  let searchTerm = document.getElementById("search").value.toLowerCase();
+  let mobileItems = document.querySelectorAll("#mobile-list .item-card");
+  let laptopItems = document.querySelectorAll("#laptop-list .item-card");
+
+  // Filter mobile items
+  mobileItems.forEach(item => {
+    let itemName = item.querySelector("h3").textContent.toLowerCase();
+    let itemDescription = item.querySelector("p").textContent.toLowerCase();
+    item.style.display = (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) ? "block" : "none";
+  });
+
+  // Filter laptop items
+  laptopItems.forEach(item => {
+    let itemName = item.querySelector("h3").textContent.toLowerCase();
+    let itemDescription = item.querySelector("p").textContent.toLowerCase();
+    item.style.display = (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) ? "block" : "none";
+  });
+}
+
+function selectCategory(category) {
+  // Update the input value with the selected category
+  document.getElementById('search').value = category;
+
+  // Hide the first dropdown after selection
+  document.getElementById('dropdown').style.display = 'none';
+
+  // If "Mobile" is selected, show the mobile-specific dropdown
+  if (category === 'Mobile') {
+    document.getElementById('mobile-dropdown').style.display = 'block';
+    document.getElementById('laptop-dropdown').style.display = 'none'; // Hide laptop dropdown
+    showCategoryItems('Mobile'); // Show only mobile items
+  } 
+  // If "Laptop" is selected, show the laptop-specific dropdown
+  else if (category === 'Laptop') {
+    document.getElementById('laptop-dropdown').style.display = 'block';
+    document.getElementById('mobile-dropdown').style.display = 'none'; // Hide mobile dropdown
+    showCategoryItems('Laptop'); // Show only laptop items
+  }
+}
+
+function showCategoryItems(category) {
+  const mobileItems = document.querySelectorAll("#mobile-list .item-card");
+  const laptopItems = document.querySelectorAll("#laptop-list .item-card");
+
+  const mobileSection = document.querySelector(".mobile-section");
+  const laptopSection = document.querySelector(".laptop-section");
+
+  if (category === 'Mobile') {
+    // Show mobile items, hide laptop items and sections
+    mobileItems.forEach(item => item.style.display = 'block');
+    laptopItems.forEach(item => item.style.display = 'none');
+    mobileSection.style.display = 'block'; // Show mobile section
+    laptopSection.style.display = 'none'; // Hide laptop section
+  } else if (category === 'Laptop') {
+    // Show laptop items, hide mobile items and sections
+    laptopItems.forEach(item => item.style.display = 'block');
+    mobileItems.forEach(item => item.style.display = 'none');
+    laptopSection.style.display = 'block'; // Show laptop section
+    mobileSection.style.display = 'none'; // Hide mobile section
+  }
+}
+
+
+function selectMobileOption(option) {
+  // Update the input value with the selected mobile option
+  document.getElementById('search').value = option;
+
+  // Hide the mobile-specific dropdown after selection
+  document.getElementById('mobile-dropdown').style.display = 'none';
+
+  // Filter the mobile list based on the selected option
+  filterMobileItems(option);
+}
+
+function filterMobileItems(option) {
+  let mobileItems = document.querySelectorAll("#mobile-list .item-card");
+
+  // Show or hide mobile items based on the selected option
+  mobileItems.forEach(item => {
+    let itemName = item.querySelector("h3").textContent.toLowerCase();
+    if (itemName.includes(option.toLowerCase())) {
+      item.style.display = 'block'; // Show item if it matches the selected option
+    } else {
+      item.style.display = 'none'; // Hide item if it does not match the selected option
+    }
+  });
+
+  // If the selected option is not empty, show the mobile section
+  const mobileSection = document.querySelector(".mobile-section");
+  mobileSection.style.display = 'block';
+  
+  // Optionally hide the laptop section if the mobile section is shown
+  const laptopSection = document.querySelector(".laptop-section");
+  laptopSection.style.display = 'none';
+}
+
+
+function selectLaptopOption(option) {
+  // Update the input value with the selected laptop option
+  document.getElementById('search').value = option;
+
+  // Hide the laptop-specific dropdown after selection
+  document.getElementById('laptop-dropdown').style.display = 'none';
+
+  // Filter the laptop list based on the selected option
+  filterItems('Laptop', option);
+}
+
+// Function to filter items based on category and selected option
+function filterItems(category, option) {
+  let itemList = category === 'Mobile' ? document.querySelectorAll("#mobile-list .item-card") : document.querySelectorAll("#laptop-list .item-card");
+
+  itemList.forEach(item => {
+    let itemName = item.querySelector("h3").textContent.toLowerCase();
+    if (itemName.includes(option.toLowerCase())) {
+      item.style.display = 'block'; // Show item if it matches the selected option
+    } else {
+      item.style.display = 'none'; // Hide item if it does not match the selected option
+    }
+  });
+}
+
+// Function to handle the search input and show all items if the input is empty
+document.getElementById('search').addEventListener('input', function () {
+  let searchTerm = this.value.toLowerCase();
+
+  if (searchTerm === "") {
+    // If the search bar is empty, show all items
+    const allItems = document.querySelectorAll(".item-card");
+    allItems.forEach(item => item.style.display = 'block');
+  } else {
+    // If the search bar has a value, filter the items
+    filterItemsFromSearch();
+  }
+});
+
+// Function to filter items based on the search input (for both Mobile and Laptop)
+function filterItemsFromSearch() {
+  let searchTerm = document.getElementById("search").value.toLowerCase();
+  let mobileItems = document.querySelectorAll("#mobile-list .item-card");
+  let laptopItems = document.querySelectorAll("#laptop-list .item-card");
+
+  // Filter mobile items
+  mobileItems.forEach(item => {
+    let itemName = item.querySelector("h3").textContent.toLowerCase();
+    let itemDescription = item.querySelector("p").textContent.toLowerCase();
+    item.style.display = (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) ? "block" : "none";
+  });
+
+  // Filter laptop items
+  laptopItems.forEach(item => {
+    let itemName = item.querySelector("h3").textContent.toLowerCase();
+    let itemDescription = item.querySelector("p").textContent.toLowerCase();
+    item.style.display = (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) ? "block" : "none";
+  });
+}
+
+// Show dropdown when the search bar is focused
+document.getElementById('search').addEventListener('focus', function () {
+  document.getElementById('dropdown').style.display = 'block';
+});
+
+// Show dropdown when hovering over the search bar
+document.getElementById('search').addEventListener('mouseover', function () {
+  document.getElementById('dropdown').style.display = 'block';
+});
+
+// Show dropdown when mouse enters the dropdown area
+document.getElementById('dropdown').addEventListener('mouseenter', function () {
+  document.getElementById('dropdown').style.display = 'block';
+});
+
+// Hide dropdown when mouse leaves both the search bar and the dropdown
+document.getElementById('search').addEventListener('mouseleave', function () {
+  checkDropdownVisibility();
+});
+
+document.getElementById('dropdown').addEventListener('mouseleave', function () {
+  checkDropdownVisibility();
+});
+
+// Hide mobile and laptop dropdowns when mouse leaves both the search bar and dropdown
+document.getElementById('mobile-dropdown').addEventListener('mouseleave', function () {
+  checkDropdownVisibility();
+});
+
+document.getElementById('laptop-dropdown').addEventListener('mouseleave', function () {
+  checkDropdownVisibility();
+});
+
+// Function to check whether the dropdowns should be hidden
+function checkDropdownVisibility() {
+  setTimeout(function() {
+    const searchBar = document.getElementById('search');
+    const dropdown = document.getElementById('dropdown');
+    const mobileDropdown = document.getElementById('mobile-dropdown');
+    const laptopDropdown = document.getElementById('laptop-dropdown');
+    
+    // Check if mouse is outside both the search bar and dropdowns
+    if (!searchBar.matches(':hover') && !dropdown.matches(':hover') && 
+        !mobileDropdown.matches(':hover') && !laptopDropdown.matches(':hover')) {
+      dropdown.style.display = 'none';
+      mobileDropdown.style.display = 'none';
+      laptopDropdown.style.display = 'none';
+    }
+  }, 200); // Allow time for mouse interactions
+}
+document.getElementById("dropdown").addEventListener("change", function() {
+    document.getElementById("displayArea").innerText = this.value; // Ensure no extra text is added
+});
+
+
+
+
+// Function to start speech recognition
+function startSpeechRecognition() {
+    // Implement your speech recognition logic here
+    console.log('Starting speech recognition...');
+    
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = "en-US";
+
+    recognition.onresult = function(event) {
+        // Get the transcript from speech recognition
+        let searchTerm = event.results[0][0].transcript.trim().toLowerCase();
+
+        // Remove any trailing punctuation (like periods, commas, etc.)
+        searchTerm = searchTerm.replace(/[.,!?;:']+$/, "");
+
+        // Fix the issue where words are split
+        searchTerm = searchTerm.replace(/\s+/g, ""); // Remove all spaces
+
+        // Set the cleaned value to the search input field
+        document.getElementById("search").value = searchTerm;
+
+        // Call filterItems to filter based on the cleaned search term
+        filterItems(searchTerm);
+    };
+
+    recognition.start();
+}
+
+// Function to filter items based on search term
+function filterItems(searchTerm) {
+    // Remove spaces from the search term for comparison purposes
+    searchTerm = searchTerm.replace(/\s+/g, "").toLowerCase(); // Remove all spaces
+    
+    let mobileItems = document.querySelectorAll("#mobile-list .item-card");
+    let laptopItems = document.querySelectorAll("#laptop-list .item-card");
+
+    // Filter mobile items
+    mobileItems.forEach(item => {
+        let itemName = item.querySelector("h3").textContent.trim().toLowerCase().replace(/\s+/g, "");
+        let itemDescription = item.querySelector("p").textContent.trim().toLowerCase().replace(/\s+/g, "");
+        
+        // Show the item if the cleaned search term matches the item name or description
+        item.style.display = (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) ? "block" : "none";
+    });
+
+    // Filter laptop items
+    laptopItems.forEach(item => {
+        let itemName = item.querySelector("h3").textContent.trim().toLowerCase().replace(/\s+/g, "");
+        let itemDescription = item.querySelector("p").textContent.trim().toLowerCase().replace(/\s+/g, "");
+        
+        // Show the item if the cleaned search term matches the item name or description
+        item.style.display = (itemName.includes(searchTerm) || itemDescription.includes(searchTerm)) ? "block" : "none";
+    });
+}
+
+
+
+    // Logout confirmation and redirection to login page
+    document.getElementById('logout-button').addEventListener('click', function(event) {
+      event.preventDefault();
+      
+      const confirmation = confirm("Are you sure you want to log out?");
+      if (confirmation) {
+        window.location.href = 'login.html'; // Redirect to login page
+      } else {
+        alert("Logout canceled.");
+      }
+    
+    });
+  </script>
+</body>
+</html>

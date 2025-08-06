@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Background Video -->
+  <video class="video-background" autoplay muted loop>
+    <source src="photos\bg.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Login Content -->
+  <div class="login-container">
+    <div class="login-content">
+      <!-- TrackIt Heading and Logo Section -->
+      <div class="logo-section">
+        <h1 class="trackit-heading">TrackIt</h1>
+        <img src="photos\logo.png" alt="TrackIt Logo" class="logo-image"> <!-- Add your logo image here -->
+      </div>
+
+      <!-- Login Form -->
+      <h1>Login</h1>
+      <form id="loginForm">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required>
+
+        <button type="submit">Login</button>
+      </form>
+      <p id="errorMessage" class="error-message">Invalid credentials! Please try again.</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username === "admin" && password === "password123") {
+        window.location.href = "home.html";
+      } else {
+        const errorMessage = document.getElementById("errorMessage");
+        errorMessage.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>

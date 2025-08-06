@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iPhone Models</title>
+  <link rel="stylesheet" href="styles.css"> <!-- Link to your main CSS file -->
+  <script src="script.js" defer></script> <!-- Link to the separate JavaScript file -->
+
+  <style>
+    /* Logo section on the left */
+.left-side {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 30px;  /* Adjust the size of the logo */
+  height: 30px; /* Set the height equal to the width for a perfect circle */
+  margin-right: 10px;
+  border-radius: 50%; /* Makes the logo round */
+  object-fit: cover; /* Ensures the logo fits well in the circle */
+}
+
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Function to load stock data from localStorage
+      function loadStockData() {
+        const stockData = JSON.parse(localStorage.getItem('iphoneStockData')) || {};
+
+        document.querySelectorAll('.iphone-card').forEach(function(card) {
+          const iphoneName = card.querySelector('h3').textContent;
+          const stockElement = card.querySelector('.stock');
+          
+          // If stock data exists for this model, set the stock
+          if (stockData[iphoneName]) {
+            stockElement.textContent = 'Stock: ' + stockData[iphoneName];
+          }
+        });
+      }
+
+      // Load stock data when the page loads
+      loadStockData();
+
+      // Event listener for buttons inside the container
+      const buttonContainer = document.querySelector('.iphone-list');
+      buttonContainer.addEventListener('click', function(event) {
+        // If the clicked button is "Delete"
+        if (event.target && event.target.classList.contains('delete')) {
+          // Confirm the deletion
+          const confirmation = confirm("Are you sure you want to delete this item?");
+          
+          // If confirmed, delete the item (remove the entire iphone-card)
+          if (confirmation) {
+            const iphoneCard = event.target.closest('.iphone-card'); // Find the parent iphone-card div
+            if (iphoneCard) {
+              iphoneCard.remove(); // Remove the entire iphone-card div
+            }
+          } else {
+            alert("Item not deleted.");
+          }
+        }
+
+        // If the clicked button is "Edit"
+        if (event.target && event.target.classList.contains('edit')) {
+          const iphoneCard = event.target.closest('.iphone-card');
+          if (iphoneCard) {
+            const stockElement = iphoneCard.querySelector('.stock');
+            const stockValue = stockElement.textContent.trim().split(': ')[1]; // Get the current stock value
+
+            // Create an input field to edit the stock
+            const stockInput = document.createElement('input');
+            stockInput.type = 'number';
+            stockInput.value = stockValue;
+            stockInput.classList.add('stock-input');
+            
+            // Replace the stock text with the input field
+            stockElement.innerHTML = 'Stock: ';
+            stockElement.appendChild(stockInput);
+
+            // Change the Edit button to Save
+            event.target.textContent = 'Save';
+            event.target.classList.remove('edit');
+            event.target.classList.add('save');
+
+            // Add event listener for Save button
+            event.target.addEventListener('click', function() {
+              const newStock = stockInput.value; // Get the new stock value
+              if (newStock !== '') {
+                stockElement.innerHTML = 'Stock: ' + newStock; // Update the stock display
+              }
+              
+              // Save the new stock value to localStorage
+              const iphoneName = iphoneCard.querySelector('h3').textContent;
+              let stockData = JSON.parse(localStorage.getItem('iphoneStockData')) || {};
+              stockData[iphoneName] = newStock;
+              localStorage.setItem('iphoneStockData', JSON.stringify(stockData));
+
+              // Change Save button back to Edit
+              event.target.textContent = 'Edit';
+              event.target.classList.remove('save');
+              event.target.classList.add('edit');
+            });
+          }
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <!-- Top navigation -->
+  <div class="top-tabs" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px;">
+    <img src="photos\logo.png" alt="Logo" class="logo" style="width: 30px; height: auto;">
+    <a style="flex-grow: 1; text-align: center; font-size: 18px;">iPhone</a>
+    <a href="home.html" style="flex-shrink: 0;">Home</a>
+  </div>
+
+  <!-- iPhone Models Page -->
+  <section class="iphone-section">
+    <h2>iPhone Models</h2>
+    <p>Here is a list of different iPhone models and their details:</p>
+
+    <div class="iphone-list" id="iphone-list">
+      <!-- iPhone 13 -->
+      <div class="iphone-card">
+        <img src="photos\iphone13.jpeg" alt="iPhone 13" class="iphone-image">
+        <div class="iphone-description">
+          <h3>iPhone 13</h3>
+          <p><strong>Product ID:</strong> 1001</p> <!-- Product ID -->
+          <p><strong>Brand:</strong> Apple</p> <!-- Brand -->
+          <p><strong>Storage:</strong> 128 GB / 256 GB / 512 GB</p> <!-- Storage options -->
+          <p><strong>RAM:</strong> 4 GB</p> <!-- RAM information -->
+          <p class="stock">Stock: 23</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="iphone-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+
+      <!-- iPhone 13 Pro -->
+      <div class="iphone-card">
+        <img src="photos\iphone16.jpeg" alt="iPhone 13 Pro" class="iphone-image">
+        <div class="iphone-description">
+          <h3>iPhone 13 Pro</h3>
+          <p><strong>Product ID:</strong> 1002</p> <!-- Product ID -->
+          <p><strong>Brand:</strong> Apple</p> <!-- Brand -->
+          <p><strong>Storage:</strong> 128 GB / 256 GB / 512 GB / 1 TB</p> <!-- Storage options -->
+          <p><strong>RAM:</strong> 6 GB</p> <!-- RAM information -->
+          <p class="stock">Stock: 78</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="iphone-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+      
+
+      <!-- iPhone 14 -->
+      <div class="iphone-card">
+        <img src="photos\iphone14.jpeg" alt="iPhone 14" class="iphone-image">
+        <div class="iphone-description">
+          <h3>iPhone 14</h3>
+          <p><strong>Product ID:</strong> 1003</p> <!-- Product ID -->
+          <p><strong>Brand:</strong> Apple</p> <!-- Brand -->
+          <p><strong>Storage:</strong> 128 GB / 256 GB / 512 GB</p> <!-- Storage options -->
+          <p><strong>RAM:</strong> 6 GB</p> <!-- RAM information -->
+          <p class="stock">Stock: 89</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="iphone-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+
+      <!-- iPhone 14 Pro -->
+      <div class="iphone-card">
+        <img src="photos\iphone3.jpeg" alt="iPhone 14 Pro" class="iphone-image">
+        <div class="iphone-description">
+          <h3>iPhone 14 Pro</h3>
+          <p><strong>Product ID:</strong> 1004</p> <!-- Product ID -->
+          <p><strong>Brand:</strong> Apple</p> <!-- Brand -->
+          <p><strong>Storage:</strong> 128 GB / 256 GB / 512 GB / 1 TB</p> <!-- Storage options -->
+          <p><strong>RAM:</strong> 6 GB</p> <!-- RAM information -->
+          <p class="stock">Stock: 56</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="iphone-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+
+      <!-- iPhone 15 -->
+      <div class="iphone-card">
+        <img src="photos\iphone15.jpeg" alt="iPhone 15" class="iphone-image">
+        <div class="iphone-description">
+          <h3>iPhone 15</h3>
+          <p><strong>Product ID:</strong> 1005</p> <!-- Product ID -->
+          <p><strong>Brand:</strong> Apple</p> <!-- Brand -->
+          <p><strong>Storage:</strong> 128 GB / 256 GB / 512 GB</p> <!-- Storage options -->
+          <p><strong>RAM:</strong> 6 GB</p> <!-- RAM information -->
+          <p class="stock">Stock: 23</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="iphone-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Inventory Management</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lenovo Laptops</title>
+  <link rel="stylesheet" href="styles.css"> <!-- Link to your main CSS file -->
+
+  <style>
+    /* Logo section on the left */
+.left-side {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 30px;  /* Adjust the size of the logo */
+  height: 30px; /* Set the height equal to the width for a perfect circle */
+  margin-right: 10px;
+  border-radius: 50%; /* Makes the logo round */
+  object-fit: cover; /* Ensures the logo fits well in the circle */
+}
+
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Function to load stock data from localStorage
+      function loadStockData() {
+        const stockData = JSON.parse(localStorage.getItem('lenovoStockData')) || {};
+
+        document.querySelectorAll('.laptop-card').forEach(function(card) {
+          const laptopName = card.querySelector('h3').textContent;
+          const stockElement = card.querySelector('.stock');
+
+          // If stock data exists for this model, set the stock
+          if (stockData[laptopName]) {
+            stockElement.textContent = 'Stock: ' + stockData[laptopName];
+          }
+        });
+      }
+
+      // Load stock data when the page loads
+      loadStockData();
+
+      // Event listener for buttons inside the container
+      const buttonContainer = document.querySelector('.laptop-list');
+      buttonContainer.addEventListener('click', function(event) {
+        // If the clicked button is "Delete"
+        if (event.target && event.target.classList.contains('delete')) {
+          // Confirm the deletion
+          const confirmation = confirm("Are you sure you want to delete this item?");
+          
+          // If confirmed, delete the item (remove the entire laptop-card)
+          if (confirmation) {
+            const laptopCard = event.target.closest('.laptop-card'); // Find the parent laptop-card div
+            if (laptopCard) {
+              laptopCard.remove(); // Remove the entire laptop-card div
+            }
+          } else {
+            alert("Item not deleted.");
+          }
+        }
+
+        // If the clicked button is "Edit"
+        if (event.target && event.target.classList.contains('edit')) {
+          const laptopCard = event.target.closest('.laptop-card');
+          if (laptopCard) {
+            const stockElement = laptopCard.querySelector('.stock');
+            const stockValue = stockElement.textContent.trim().split(': ')[1]; // Get the current stock value
+
+            // Create an input field to edit the stock
+            const stockInput = document.createElement('input');
+            stockInput.type = 'number';
+            stockInput.value = stockValue;
+            stockInput.classList.add('stock-input');
+            
+            // Replace the stock text with the input field
+            stockElement.innerHTML = 'Stock: ';
+            stockElement.appendChild(stockInput);
+
+            // Change the Edit button to Save
+            event.target.textContent = 'Save';
+            event.target.classList.remove('edit');
+            event.target.classList.add('save');
+
+            // Add event listener for Save button
+            event.target.addEventListener('click', function() {
+              const newStock = stockInput.value; // Get the new stock value
+              if (newStock !== '') {
+                stockElement.innerHTML = 'Stock: ' + newStock; // Update the stock display
+              }
+              
+              // Save the new stock value to localStorage
+              const laptopName = laptopCard.querySelector('h3').textContent;
+              let stockData = JSON.parse(localStorage.getItem('lenovoStockData')) || {};
+              stockData[laptopName] = newStock;
+              localStorage.setItem('lenovoStockData', JSON.stringify(stockData));
+
+              // Change Save button back to Edit
+              event.target.textContent = 'Edit';
+              event.target.classList.remove('save');
+              event.target.classList.add('edit');
+            });
+          }
+        }
+      });
+    });
+  </script>
+
+</head>
+<body>
+  <!-- Top navigation -->
+  <div class="top-tabs" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px;">
+    <!-- Logo on the left -->
+    <img src="photos\logo.png" alt="Logo" class="logo" style="width: 30px; height: auto;">
+    <!-- Lenovo Laptops in the center -->
+    <a style="flex-grow: 1; text-align: center; font-size: 18px;">Lenovo Laptops</a>
+    <!-- Home on the right -->
+    <a href="home.html" style="flex-shrink: 0;">Home</a>
+  </div>
+
+  <!-- Lenovo Laptops Page -->
+  <section class="laptop-section">
+    <h2>Lenovo Laptops</h2>
+    <p>Here is a list of different Lenovo laptop models, their descriptions, and images:</p>
+
+    <div class="laptop-list">
+      <!-- Lenovo ThinkPad X1 Carbon -->
+      <div class="laptop-card">
+        <img src="photos\lenovo1.jpeg" alt="Lenovo ThinkPad X1 Carbon" class="laptop-image">
+        <div class="laptop-description">
+          <h3>Lenovo ThinkPad X1 Carbon</h3>
+          <p><strong>Brand:</strong> Lenovo</p>
+          <p><strong>Product ID:</strong> 12345</p>
+          <p><strong>Storage:</strong> 512 GB SSD</p>
+          <p><strong>RAM:</strong> 16 GB</p>
+          <p class="stock">Stock: 27</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="laptop-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+
+      <!-- Lenovo IdeaPad 3 -->
+      <div class="laptop-card">
+        <img src="photos\lenovo2.jpeg" alt="Lenovo IdeaPad 3" class="laptop-image">
+        <div class="laptop-description">
+          <h3>Lenovo IdeaPad 3</h3>
+          <p><strong>Brand:</strong> Lenovo</p>
+          <p><strong>Product ID:</strong> 67890</p>
+          <p><strong>Storage:</strong> 256 GB SSD</p>
+          <p><strong>RAM:</strong> 8 GB</p>
+          <p class="stock">Stock: 89</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="laptop-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+
+      <!-- Lenovo Legion 5 -->
+      <div class="laptop-card">
+        <img src="photos\lenovo3.jpeg" alt="Lenovo Legion 5" class="laptop-image">
+        <div class="laptop-description">
+          <h3>Lenovo Legion 5</h3>
+          <p><strong>Brand:</strong> Lenovo</p>
+          <p><strong>Product ID:</strong> 24680</p>
+          <p><strong>Storage:</strong> 1 TB SSD</p>
+          <p><strong>RAM:</strong> 16 GB</p>
+          <p class="stock">Stock: 56</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="laptop-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+
+      <!-- Lenovo Yoga 9i -->
+      <div class="laptop-card">
+        <img src="photos\lenovo4.jpeg" alt="Lenovo Yoga 9i" class="laptop-image">
+        <div class="laptop-description">
+          <h3>Lenovo Yoga 9i</h3>
+          <p><strong>Brand:</strong> Lenovo</p>
+          <p><strong>Product ID:</strong> 11223</p>
+          <p><strong>Storage:</strong> 512 GB SSD</p>
+          <p><strong>RAM:</strong> 16 GB</p>
+          <p class="stock">Stock: 67</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="laptop-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+
+      <!-- Lenovo ThinkPad E14 -->
+      <div class="laptop-card">
+        <img src="photos\lenovo5.jpeg" alt="Lenovo ThinkPad E14" class="laptop-image">
+        <div class="laptop-description">
+          <h3>Lenovo ThinkPad E14</h3>
+          <p><strong>Brand:</strong> Lenovo</p>
+          <p><strong>Product ID:</strong> 98765</p>
+          <p><strong>Storage:</strong> 256 GB SSD</p>
+          <p><strong>RAM:</strong> 8 GB</p>
+          <p class="stock">Stock: 34</p> <!-- Stock quantity displayed here -->
+        </div>
+        <!-- Edit and Delete Buttons -->
+        <div class="laptop-buttons">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Inventory Management</p>
+  </footer>
+</body>
+</html>

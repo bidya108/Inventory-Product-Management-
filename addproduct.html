@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Add some basic styling for the feedback message */
+    .feedback-message {
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 5px;
+      display: none; /* Start hidden */
+      text-align: center;
+    }
+
+    .feedback-message.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .feedback-message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .feedback-message.info {
+      background-color: #cce5ff;
+      color: #004085;
+    }
+
+    /* Logo section on the left */
+    .left-side {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 30px;  /* Adjust the size of the logo */
+      height: 30px; /* Set the height equal to the width for a perfect circle */
+      margin-right: 10px;
+      border-radius: 50%; /* Makes the logo round */
+      object-fit: cover; /* Ensures the logo fits well in the circle */
+    }
+  </style>
+</head>
+<body>
+   <!-- Top navigation -->
+<div class="top-tabs" style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px;">
+  <!-- Logo on the left -->
+  <img src="photos\logo.png" alt="Logo" class="logo" style="width: 30px; height: auto;">
+  
+  <!-- Dell Laptops in the center -->
+  <a style="flex-grow: 1; text-align: center; font-size: 18px;">Add Products</a>
+
+  <!-- Home on the right -->
+  <a href="home.html" style="flex-shrink: 0;">Home</a>
+</div>
+  
+  <!-- Back Button -->
+  <button class="go-back-btn" onclick="window.history.back()">Go Back</button>
+
+  <!-- Form to Add a New Product -->
+  <div class="add-product-container">
+    <h2>Add a New Product</h2>
+    
+    <!-- Form -->
+    <form id="add-product-form">
+      <label for="product-id">Product ID:</label>
+      <input type="text" id="product-id" name="product-id" placeholder="Enter product ID" required><br><br>
+
+      
+      <label for="brand">Brand:</label>
+      <input type="text" id="brand" name="brand" placeholder="Enter brand name" required><br><br>
+
+      <label for="storage">Storage:</label>
+      <input type="text" id="storage" name="storage" placeholder="Enter storage capacity (e.g., 256GB)" required><br><br>
+
+      <label for="ram">RAM:</label>
+      <input type="text" id="ram" name="ram" placeholder="Enter RAM size (e.g., 8GB)" required><br><br>
+
+      <label for="product-photo">Product Photo:</label>
+      <input type="file" id="product-photo" name="product-photo" accept="image/*" required><br><br>
+
+      <label for="product-stock">Number of Stock:</label>
+      <input type="number" id="product-stock" name="product-stock" min="1" placeholder="Enter number of stock" required><br><br>
+      
+      <!-- Image Preview -->
+      <div id="image-preview" class="preview-container">
+        <p>Image Preview:</p>
+        <img id="preview-img" src="" alt="Preview Image">
+      </div>
+
+      <input type="submit" value="Add Product" class="submit-btn">
+    </form>
+
+    <!-- Feedback Message -->
+    <div id="feedback-message" class="feedback-message"></div>
+  </div>
+
+  <script>
+    // Image Preview Function
+    const imageInput = document.getElementById('product-photo');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+
+    imageInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImg.src = e.target.result;  // Set the preview image
+          imagePreview.style.display = 'block'; // Show the preview section
+        };
+        reader.readAsDataURL(file);
+      } else {
+        imagePreview.style.display = 'none'; // Hide the preview section if no file is selected
+      }
+    });
+
+    // Form Submit and Validation
+    document.getElementById('add-product-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Hide any previous feedback message
+      document.getElementById('feedback-message').style.display = 'none';
+
+      const productId = document.getElementById('product-id').value.trim();
+      const productName = document.getElementById('product-name').value.trim();
+      const brand = document.getElementById('brand').value.trim();
+      const storage = document.getElementById('storage').value.trim();
+      const ram = document.getElementById('ram').value.trim();
+      const productPhoto = imageInput.files[0];
+      const productStock = document.getElementById('product-stock').value.trim();
+
+      if (!productId || !productName || !brand || !storage || !ram || !productPhoto || !productStock) {
+        // Show error feedback if any field is missing
+        showFeedback('Please provide all the required fields: ID, name, brand, storage, RAM, photo, and stock.', 'error');
+        return;
+      }
+
+      // Display loading message while processing the image upload
+      showFeedback('Uploading product...', 'info');
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Prepare product data
+        const productData = {
+          id: productId,
+          name: productName,
+          brand: brand,
+          storage: storage,
+          ram: ram,
+          photo: e.target.result,
+          stock: productStock
+        };
+
+        // Get existing products from localStorage or create a new array
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        
+        // Add the new product to the array
+        products.push(productData);
+
+        // Store updated product list in localStorage
+        localStorage.setItem('products', JSON.stringify(products));
+
+        // Successfully added the product, show success message
+        showFeedback(`Product "${productName}" added successfully!`, 'success');
+
+        // Redirect to the home page (inventory page)
+        setTimeout(() => {
+          window.location.href = 'home.html'; // Replace 'home.html' with your actual home page
+        }, 1500); // Redirect after 1.5 seconds
+      };
+      reader.readAsDataURL(productPhoto);  // Read the image file as base64 URL
+    });
+
+    // Function to display feedback messages
+    function showFeedback(message, type) {
+      const feedbackElement = document.getElementById('feedback-message');
+      feedbackElement.textContent = message;
+      feedbackElement.style.display = 'block';
+      feedbackElement.classList.remove('success', 'error', 'info');
+      feedbackElement.classList.add(type); // Add dynamic class based on feedback type
+    }
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Your Inventory Management</p>
+  </footer>
+</body>
+</html>
