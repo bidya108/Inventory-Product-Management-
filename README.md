@@ -18,4 +18,4 @@ This is a simple web-based inventory management project designed to track electr
 ## Getting Started
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/product-inventory-management
+   git clone https://github.com/bidya108/product-inventory-management
